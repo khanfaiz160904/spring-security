@@ -11,10 +11,10 @@ public class UserService {
 
 	ArrayList<User> user = new ArrayList<>();
 
-	public UserService() {
-		user.add(new User("faiz", "faiz@gmail.com", "faiz@123"));
-		user.add(new User("ayan", "ayan@gmail.com", "ayan@123"));
-	}
+//	public UserService() {
+//		user.add(new User("faiz", "faiz@gmail.com", "faiz@123"));
+//		user.add(new User("ayan", "ayan@gmail.com", "ayan@123"));
+//	}
 
 	public boolean add(User use) {
 		return user.add(use);

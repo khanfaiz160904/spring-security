@@ -14,6 +14,11 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
+	@GetMapping("/getall")
+	public List<User> getAll(){
+		return userService.getAll();
+	}
+
 	@PostMapping("/add")
 	public String addUser(@RequestBody User user) {
 		boolean b = userService.add(user);
@@ -25,10 +30,7 @@ public class UserController {
 		return userService.getUserByName(name);
 	}
 	
-	@GetMapping("/getall")
-	public List<User> getAll(){
-		return userService.getAll();
-	}
+
 	
 	@DeleteMapping("/delete")
 	public void deleteAll() {

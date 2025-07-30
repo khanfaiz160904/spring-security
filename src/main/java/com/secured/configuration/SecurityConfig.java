@@ -10,7 +10,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 @Configuration
 @EnableWebSecurity
@@ -23,9 +22,10 @@ public class SecurityConfig {
 
 		UserDetails user = User.withUsername("faiz")
 				.password(encoder.encode("faiz@123")).roles("USER").build();
+
 		return new InMemoryUserDetailsManager(admin, user);
 	}
-	
+
 	@Bean
 	public PasswordEncoder encoder() {
 		return new BCryptPasswordEncoder();
@@ -33,19 +33,22 @@ public class SecurityConfig {
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).and()
-		.authorizeHttpRequests()
-		.requestMatchers("/loginform").permitAll()
-		.requestMatchers("/public/**").hasRole("ADMIN")
-		.requestMatchers("/user/**").hasRole("USER")
-		
-		.anyRequest().authenticated()
-		.and().formLogin()
+		http.csrf().disable()
+				.authorizeHttpRequests()
+				.requestMatchers("/loginform").permitAll()
+				.requestMatchers("/public/**").hasRole("ADMIN")
+				.requestMatchers("/user/**").hasRole("USER")
+				.anyRequest().authenticated()
+				.and()
+				.formLogin()
 				.loginPage("/loginform")
 				.loginProcessingUrl("/index")
-				.defaultSuccessUrl("/public/");
-
+				.defaultSuccessUrl("/public/getall", true)
+				.permitAll()
+				.and()
+				.logout()
+				.logoutSuccessUrl("/loginform?logout")
+				.permitAll();
 		return http.build();
 	}
-
 }
